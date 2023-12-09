@@ -1,8 +1,10 @@
 let boardSize;
+let gameBoard;
+let currPlayer = 'X';
 
 function startGame() {
     boardSize = parseInt(document.getElementById('board-size').value);
-    console.log('Board size: ', boardSize);
+    gameBoard = Array.from({ length: boardSize }, () => Array(boardSize).fill(''));
     renderBoard();
 }
 
@@ -17,9 +19,21 @@ function renderBoard() {
         for (let j = 0; j < boardSize; j++) {
             const cell = document.createElement('div');
             cell.className = 'cell';
+            cell.innerText = gameBoard[i][j];
+            cell.addEventListener('click', () => cellClick(i, j));
             row.appendChild(cell);
         }
 
         boardElement.appendChild(row);
     }
+}
+
+function cellClick(row, col) {
+    if (gameBoard[row][col] === 'X' || gameBoard[row][col] === 'O') {
+        gameBoard[row][col] = '';
+    } else {
+        gameBoard[row][col] = currPlayer;
+        currPlayer = currPlayer === 'X' ? 'O' : 'X';
+    }
+    renderBoard();
 }
