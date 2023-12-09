@@ -8,13 +8,34 @@
 </head>
 <body>
     <div class="game-container">
-        <label for="board-size">Select Board Size:</label>
-        <select id="board-size">
-            <option value="3">3X3</option>
-            <option value="4">4X4</option>
-            <option value="5">5X5</option>
-        </select>
-        <button onclick="startGame()">Start Game</button>
+        <div id="selection-container">
+            <label for="board-size">Selecione o tamanho do tabuleiro:</label>
+            <select id="board-size">
+                <option value="" disabled selected>Selecione uma opção</option>
+                <option value="3">3X3</option>
+                <option value="4">4X4</option>
+                <option value="5">5X5</option>
+                <option value="6">6X6</option>
+                <option value="7">7X7</option>
+                <option value="8">8X8</option>
+                <option value="9">9X9</option>
+                <option value="10">10X10</option>
+            </select>
+
+            <br>
+        
+            <label>Selecione o modo de jogo:</label>
+            <input type="radio" id="singlePlayer" name="gameMode" value="single" checked>
+            <label for="singlePlayer">Singleplayer</label>
+        
+            <input type="radio" id="multiPlayer" name="gameMode" value="multi">
+            <label for="multiPlayer">Multiplayer</label>
+        </div>
+        
+        <div id="button-container">
+            <button onclick="startGame()">Iniciar Jogo</button>
+        </div>
+
         <div id="board"></div>
     </div>
 
