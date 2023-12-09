@@ -4,6 +4,7 @@ let gameMode;
 let currPlayer = 'X';
 
 function startGame() {
+    currPlayer = 'X';
     boardSize = parseInt(document.getElementById('board-size').value);
     gameBoard = Array.from({ length: boardSize }, () => Array(boardSize).fill(''));
     gameMode = document.querySelector('input[name=gameMode]:checked').value;
@@ -37,8 +38,29 @@ function cellClick(row, col) {
         gameBoard[row][col] = currPlayer;
         currPlayer = currPlayer === 'X' ? 'O' : 'X';
     }
-    console.log(checkVictory(row,col));
+    let gameStatus = verifyEndGame(row,col);
+    console.log(gameStatus);
+    if(gameStatus != 'Deu velha' && gameStatus != 'Venceu'){
+        computerLogic();
+        console.log(verifyEndGame(row, col));
+    }
     renderBoard();
+}
+
+function computerLogic(){
+    while(true){
+        let row = Math.floor(Math.random() * boardSize);
+        let col = Math.floor(Math.random() * boardSize);
+        if(gameBoard[row][col] == ''){
+            gameBoard[row][col] = currPlayer;
+            currPlayer = currPlayer === 'X' ? 'O' : 'X';
+            break;
+        }
+    }
+}
+
+function verifyEndGame(row, col){
+    return (checkVictory(row, col) == 'Venceu') ? 'Venceu' : checkTie();
 }
 
 function checkVictory(row, col){
@@ -48,6 +70,17 @@ function checkVictory(row, col){
     else if(row == boardSize - 1 - col) return verifySecondaryDiagonal();
     // Verify for both rows and columns
     return verifyRowAndCow(row, col);
+}
+
+function checkTie(){
+    for(let row = 0; row < boardSize; ++row){
+        for(let col = 0; col < boardSize; ++col){
+            if(gameBoard[row][col] == ''){
+                return 'Não deu velha';
+            }
+        }
+    }
+    return 'Deu velha';
 }
 
 function verifyMainDiagonal(){
