@@ -1,10 +1,12 @@
 let boardSize;
 let gameBoard;
+let gameMode;
 let currPlayer = 'X';
 
 function startGame() {
     boardSize = parseInt(document.getElementById('board-size').value);
     gameBoard = Array.from({ length: boardSize }, () => Array(boardSize).fill(''));
+    gameMode = document.querySelector('input[name=gameMode]:checked').value;
     renderBoard();
 }
 
