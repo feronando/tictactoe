@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Jogo da Velha</title>
+</head>
+<body>
+    <div class="game-container">
+        <label for="board-size">Select Board Size:</label>
+        <select id="board-size">
+            <option value="3">3X3</option>
+            <option value="4">4X4</option>
+            <option value="5">5X5</option>
+        </select>
+        <button onclick="startGame()">Start Game</button>
+        <div id="board"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
