@@ -2,6 +2,7 @@ let boardSize;
 let gameBoard;
 let gameMode;
 let gameStatus = '';
+let message = '';
 let currPlayer = 'X';
 
 function startGame() {
@@ -9,6 +10,13 @@ function startGame() {
     boardSize = parseInt(document.getElementById('board-size').value);
     gameBoard = Array.from({ length: boardSize }, () => Array(boardSize).fill(''));
     gameMode = document.querySelector('input[name=gameMode]:checked').value;
+    if(gameStatus != ''){
+        let gameContainer = document.getElementById('game-container');
+        const message = document.getElementById('message-game');
+        if(gameContainer.contains(message)){
+            gameContainer.removeChild(message);
+        }
+    }
     gameStatus = '';
     renderBoard();
 }
@@ -30,6 +38,13 @@ function renderBoard() {
         }
 
         boardElement.appendChild(row);
+    }
+    if(gameStatus != ''){
+        gameContainer = document.getElementById('game-container');
+        const message = document.createElement('p');
+        message.id = 'message-game';
+        message.innerText = gameStatus;
+        gameContainer.appendChild(message);
     }
 }
 
