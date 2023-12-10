@@ -1,6 +1,7 @@
 let boardSize;
 let gameBoard;
 let gameMode;
+let gameStatus = '';
 let currPlayer = 'X';
 
 function startGame() {
@@ -8,6 +9,7 @@ function startGame() {
     boardSize = parseInt(document.getElementById('board-size').value);
     gameBoard = Array.from({ length: boardSize }, () => Array(boardSize).fill(''));
     gameMode = document.querySelector('input[name=gameMode]:checked').value;
+    gameStatus = '';
     renderBoard();
 }
 
@@ -32,17 +34,18 @@ function renderBoard() {
 }
 
 function cellClick(row, col) {
+    if(gameStatus != '') return;
     if (gameBoard[row][col] === 'X' || gameBoard[row][col] === 'O') {
         gameBoard[row][col] = '';
     } else {
         gameBoard[row][col] = currPlayer;
         currPlayer = currPlayer === 'X' ? 'O' : 'X';
     }
-    let gameStatus = verifyEndGame(row,col);
+    gameStatus = verifyEndGame(row,col);
     console.log(gameStatus);
-    if(gameStatus != 'Deu velha' && gameStatus != 'Venceu'){
+    if(gameStatus == ''){
         computerLogic();
-        console.log(verifyEndGame(row, col));
+        console.log(gameStatus);
     }
     renderBoard();
 }
@@ -54,6 +57,7 @@ function computerLogic(){
         if(gameBoard[row][col] == ''){
             gameBoard[row][col] = currPlayer;
             currPlayer = currPlayer === 'X' ? 'O' : 'X';
+            gameStatus = verifyEndGame(row,col);
             break;
         }
     }
@@ -76,7 +80,7 @@ function checkTie(){
     for(let row = 0; row < boardSize; ++row){
         for(let col = 0; col < boardSize; ++col){
             if(gameBoard[row][col] == ''){
-                return 'Não deu velha';
+                return '';
             }
         }
     }
@@ -88,7 +92,7 @@ function verifyMainDiagonal(){
     for(let i = 1; i < boardSize; ++i){
         if(gameBoard[i-1][i-1] == gameBoard[i][i]) ++count;
     }
-    return count == boardSize-1 ? 'Venceu' : 'Ainda não venceu';
+    return count == boardSize-1 ? 'Venceu' : '';
 }
 
 function verifySecondaryDiagonal(){
@@ -96,7 +100,7 @@ function verifySecondaryDiagonal(){
     for(let i = 0; i < boardSize; ++i){
         if(gameBoard[i][boardSize - 1 - i] == gameBoard[0][boardSize - 1]) ++count;
     }
-    return count == boardSize ? 'Venceu' : 'Ainda não venceu';
+    return count == boardSize ? 'Venceu' : '';
 }
 
 function verifyRowAndCow(row, col){
@@ -105,5 +109,5 @@ function verifyRowAndCow(row, col){
         if(gameBoard[row][i-1] == gameBoard[row][i]) ++countRow;
         if(gameBoard[i-1][col] == gameBoard[i][col]) ++countCol;
     }
-    return (countRow == boardSize - 1) || (countCol == boardSize - 1) ? 'Venceu' : 'Ainda não venceu';
+    return (countRow == boardSize - 1) || (countCol == boardSize - 1) ? 'Venceu' : '';
 }
