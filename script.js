@@ -10,6 +10,9 @@ function startGame() {
     boardSize = parseInt(document.getElementById('board-size').value);
     gameBoard = Array.from({ length: boardSize }, () => Array(boardSize).fill(''));
     gameMode = document.querySelector('input[name=gameMode]:checked').value;
+    // If the game status is different of empty string, that means that
+    // the button was pressed to restart the game
+    // thus, it's needed to remove the last message of the game.
     if(gameStatus != ''){
         let gameContainer = document.getElementById('game-container');
         const message = document.getElementById('message-game');
@@ -39,6 +42,7 @@ function renderBoard() {
 
         boardElement.appendChild(row);
     }
+    // Similarly, adding the end game message.
     if(gameStatus != ''){
         gameContainer = document.getElementById('game-container');
         const message = document.createElement('p');
@@ -57,14 +61,16 @@ function cellClick(row, col) {
         currPlayer = currPlayer === 'X' ? 'O' : 'X';
     }
     gameStatus = verifyEndGame(row,col);
-    console.log(gameStatus);
-    if(gameStatus == ''){
+    // If the game has not ended, the computer will make the move.
+    // Note that it's needed that the game mode is set to single.
+    if(gameStatus == '' && gameMode == "single"){
         computerLogic();
-        console.log(gameStatus);
     }
     renderBoard();
 }
 
+// Function to select a random valid space for the computer set a
+// its move.
 function computerLogic(){
     while(true){
         let row = Math.floor(Math.random() * boardSize);
@@ -83,12 +89,18 @@ function verifyEndGame(row, col){
 }
 
 function checkVictory(row, col){
+    let message = '';
     // Verify main diagonal
-    if(row == col) return verifyMainDiagonal();
+    if(row == col) message = verifyMainDiagonal();
     // Verify secondary diagonal
-    else if(row == boardSize - 1 - col) return verifySecondaryDiagonal();
+    if(row == boardSize - 1 - col){ 
+        if(message != 'Venceu') message = verifySecondaryDiagonal();
+    }
     // Verify for both rows and columns
-    return verifyRowAndCow(row, col);
+    if(message != 'Venceu'){
+        message = verifyRowAndCol(row, col);
+    }
+    return message;
 }
 
 function checkTie(){
@@ -118,11 +130,11 @@ function verifySecondaryDiagonal(){
     return count == boardSize ? 'Venceu' : '';
 }
 
-function verifyRowAndCow(row, col){
+function verifyRowAndCol(row, col){
     let countRow = countCol = 0;
     for(let i = 1; i < boardSize; ++i){
-        if(gameBoard[row][i-1] == gameBoard[row][i]) ++countRow;
-        if(gameBoard[i-1][col] == gameBoard[i][col]) ++countCol;
+        if(gameBoard[row][0] == gameBoard[row][i]) ++countRow;
+        if(gameBoard[0][col] == gameBoard[i][col]) ++countCol;
     }
     return (countRow == boardSize - 1) || (countCol == boardSize - 1) ? 'Venceu' : '';
 }
