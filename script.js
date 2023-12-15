@@ -15,9 +15,7 @@ function startGame() {
     if(gameStatus != '') {
         let gameContainer = document.getElementById('game-container');
         const message = document.getElementById('message-game');
-        if(gameContainer.contains(message)) {
-            gameContainer.removeChild(message);
-        }
+        if(message) { gameContainer.removeChild(message); }
     }
     gameStatus = '';
     renderBoard();
@@ -56,12 +54,8 @@ function cellClick(row, col) {
     if(gameStatus === '' && gameBoard[row][col] === '') {
         gameBoard[row][col] = currPlayer;
         currPlayer = currPlayer === 'X' ? 'O' : 'X';
-        
         verifyEndGame(row,col);
-        if (gameMode === "single" && gameStatus === '') {
-            computerLogic();
-        }
-        
+        if (gameMode === "single" && gameStatus === '') { computerLogic(); }
         renderBoard();
     }
 }
@@ -84,33 +78,25 @@ function computerLogic(){
 function verifyEndGame(row, col){
     if (checkVictory(row, col)) {
         if (gameMode === "multi") {
-            if (currPlayer === 'O') {
-                gameStatus = "Jogador 1 venceu!!"
-            } else {
-                gameStatus = "Jogador 2 venceu!!"
-            }
+            if (currPlayer === 'O') { gameStatus = "Jogador 1 venceu!!" } 
+            else { gameStatus = "Jogador 2 venceu!!" }
         } else {
-            if (currPlayer === 'O') {
-                gameStatus = "Jogador venceu!!"
-            } else {
-                gameStatus = "Computador venceu!!"
-            }
+            if (currPlayer === 'O') { gameStatus = "Jogador venceu!!" } 
+            else { gameStatus = "Computador venceu!!" }
         }
-
-    } else if (checkTie())
-        gameStatus = "Deu velha!!";
+    } else if (checkTie()) { gameStatus = "Deu velha!!"; }
 }
 
 function checkVictory(row, col){
     let victory = false;
     // Verify main diagonal
-    if(row === col) victory = verifyMainDiagonal();
+    if(row === col) { victory = verifyMainDiagonal(); }
 
     // Verify secondary diagonal
-    if(row === boardSize - 1 - col && victory === false) victory = verifySecondaryDiagonal();
+    if(row === boardSize - 1 - col && !victory) { victory = verifySecondaryDiagonal(); }
 
     // Verify for both rows and columns
-    if(victory === false) victory = verifyRowAndCol(row, col);
+    if(victory === false) { victory = verifyRowAndCol(row, col); }
 
     return victory;
 }
@@ -118,7 +104,7 @@ function checkVictory(row, col){
 function checkTie(){
     for(let row = 0; row < boardSize; ++row){
         for(let col = 0; col < boardSize; ++col){
-            if(gameBoard[row][col] == '') return false;
+            if(gameBoard[row][col] === '') { return false; }
         }
     }
     return true;
@@ -127,7 +113,7 @@ function checkTie(){
 function verifyMainDiagonal(){
     let count = 0;
     for(let i = 1; i < boardSize; ++i) {
-        if(gameBoard[i-1][i-1] === gameBoard[i][i]) ++count;
+        if(gameBoard[i-1][i-1] === gameBoard[i][i]) { ++count; }
     }
     return count === boardSize-1 ? true : false;
 }
@@ -135,16 +121,16 @@ function verifyMainDiagonal(){
 function verifySecondaryDiagonal(){
     let count = 0;
     for(let i = 0; i < boardSize; ++i) {
-        if(gameBoard[i][boardSize - 1 - i] == gameBoard[0][boardSize - 1]) ++count;
+        if(gameBoard[i][boardSize - 1 - i] === gameBoard[0][boardSize - 1]) { ++count; }
     }
-    return count == boardSize ? true : false;
+    return count === boardSize ? true : false;
 }
 
 function verifyRowAndCol(row, col){
     let countRow = countCol = 0;
     for(let i = 1; i < boardSize; ++i) {
-        if(gameBoard[row][0] == gameBoard[row][i]) ++countRow;
-        if(gameBoard[0][col] == gameBoard[i][col]) ++countCol;
+        if(gameBoard[row][0] === gameBoard[row][i]) { ++countRow; }
+        if(gameBoard[0][col] === gameBoard[i][col]) { ++countCol; }
     }
-    return (countRow == boardSize - 1) || (countCol == boardSize - 1) ? true : false;
+    return (countRow === boardSize - 1) || (countCol === boardSize - 1) ? true : false;
 }
